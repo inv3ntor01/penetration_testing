@@ -1,3 +1,4 @@
+#This script was used for Clocky machine in TryHackMe
 import sys
 import datetime
 import hashlib
