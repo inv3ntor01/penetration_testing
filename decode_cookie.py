@@ -22,3 +22,16 @@ def decode(cookie):
         data = payload.split(".")[0]
 
         data = base64_decode(data)
+        if compressed:
+            data = zlib.decompress(data)
+
+        return data.decode("utf-8")
+    except Exception as e:
+        return f"[Decoding error: are you sure this was a Flask session cookie? {e}]"
+
+
+cookie = sys.argv[1]
+data = decode(cookie)
+json_data = json.loads(data)
+pretty = json.dumps(json_data, sort_keys=True, indent=4, separators=(",", ": "))
+print(pretty)
