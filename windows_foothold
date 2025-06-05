@@ -1,2 +1,5 @@
 Username = getuid
 Windows information = sysinfo
+
+#Futher recon on a given foothold
+run post/multi/recon/local_exploit_suggester
