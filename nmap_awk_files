@@ -1,0 +1,48 @@
+#Example
+# Nmap 7.95 scan initiated Thu Sep 11 06:47:40 2025 as: /usr/lib/nmap/nmap --privileged -p- -Pn -T4 -v -oN all_ports --open --unprivilege 10.201.107.62
+Nmap scan report for 10.201.107.62
+Host is up (0.41s latency).
+Not shown: 65506 closed tcp ports (conn-refused)
+PORT    STATE SERVICE
+21/tcp  open  ftp
+22/tcp  open  ssh
+80/tcp  open  http
+100/tcp open  newacct
+101/tcp open  hostname
+102/tcp open  iso-tsap
+103/tcp open  gppitnp
+104/tcp open  acr-nema
+105/tcp open  csnet-ns
+106/tcp open  pop3pw
+107/tcp open  rtelnet
+108/tcp open  snagas
+109/tcp open  pop2
+110/tcp open  pop3
+111/tcp open  rpcbind
+112/tcp open  mcidas
+113/tcp open  ident
+114/tcp open  audionews
+115/tcp open  sftp
+116/tcp open  ansanotify
+117/tcp open  uucp-path
+118/tcp open  sqlserv
+119/tcp open  nntp
+120/tcp open  cfdptkt
+121/tcp open  erpc
+122/tcp open  smakynet
+123/tcp open  ntp
+124/tcp open  ansatrader
+125/tcp open  locus-map
+
+Read data files from: /usr/share/nmap
+# Nmap done at Thu Sep 11 06:50:05 2025 -- 1 IP address (1 host up) scanned in 144.57 seconds
+
+
+#Command show only ports open in horizontal mode
+awk '/^[0-9]+\/tcp[[:space:]]+open/ {split($1,a,"/"); print a[1]}' all_ports
+
+#Command ports in vertical mode and place it in the 'port' variable
+ports=$(awk '/^[0-9]+\/tcp[[:space:]]+open/ {split($1,a,"/"); print a[1]}' all_ports) | paste -sd ',' -)
+
+#Then use nmap
+nmap -p '$ports' -sCV -Pn -T4 -v -oN all_ports MACHINE_IP
