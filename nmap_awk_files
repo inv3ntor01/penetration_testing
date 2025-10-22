@@ -46,3 +46,18 @@ ports=$(awk '/^[0-9]+\/tcp[[:space:]]+open/ {split($1,a,"/"); print a[1]}' all_p
 
 #Then use nmap
 nmap -p '$ports' -sCV -Pn -T4 -v -oN all_ports MACHINE_IP
+
+
+
+
+
+----------------------------------------------------
+#other method
+grep '^[:0-9]' all_ports | awk '{print $1}' | cut -d/ -f1 | paste -sd, - | split -l 10 - ports_ && for f in ports_*; do nmap -sV -p $(paste -sd, $f) 10.201.107.62; done
+
+#grep '^[:0-9]' all_ports: filters lines starting with a port number.
+#awk '{print $1}': extracts the port/protocol field (e.g., 80/tcp).
+#cut -d/ -f1: removes the /tcp part, leaving just the port number.
+#paste -sd, -: joins all ports into a comma-separated list.
+#split -l 10 - ports_: splits the list into files with 10 ports each.
+#for f in ports_*; do ...; done: loops through each chunk and runs nmap with those ports.
